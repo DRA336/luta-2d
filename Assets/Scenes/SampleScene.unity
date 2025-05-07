@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -522,6 +523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1206885013}
   - component: {fileID: 1206885015}
+  - component: {fileID: 1206885016}
   - component: {fileID: 1206885014}
   m_Layer: 0
   m_Name: R_Nkees
@@ -642,6 +644,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1206885016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206885012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179a3d56e977f814ebf9a488c8449d90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nomeHitbox: Joelho Direito
 --- !u!1 &1288536605
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +752,8 @@ GameObject:
   - component: {fileID: 1529617963}
   - component: {fileID: 1529617962}
   - component: {fileID: 1529617966}
+  - component: {fileID: 1529617967}
+  - component: {fileID: 1529617968}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -834,6 +851,49 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!50 &1529617967
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529617961}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &1529617968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529617961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4863b0f37934df46b283362875cb9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  danoBase: 10
+  hitboxes:
+  - {fileID: 1967937238}
+  - {fileID: 1206885012}
 --- !u!1 &1944884046
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,7 +907,7 @@ GameObject:
   - component: {fileID: 1944884047}
   m_Layer: 0
   m_Name: Saco de pancada
-  m_TagString: Untagged
+  m_TagString: SacoDePancada
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -864,6 +924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da476a2f263f294eae2f7d6b8c3324f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempoComboMaximo: 0.5
 --- !u!70 &1944884048
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -927,6 +988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1967937239}
   - component: {fileID: 1967937241}
+  - component: {fileID: 1967937242}
   - component: {fileID: 1967937240}
   m_Layer: 0
   m_Name: HitBox
@@ -1047,6 +1109,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1967937242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967937238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179a3d56e977f814ebf9a488c8449d90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nomeHitbox: "P\xE9 direito"
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
