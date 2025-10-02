@@ -1,0 +1,56 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameSession : MonoBehaviour
+{
+    public static GameSession I { get; private set; }
+
+    [Header("Cenas")]
+    public string startScene = "StartScreen";
+    public string mainMenuScene = "MainMenu";
+    public string settingsScene = "Settings";
+    public string charSelectScene = "CharacterSelect";
+    public string stageSelectScene = "StageSelect";
+    public string fightScene = "Fight";
+
+    [Header("Dados de Seleção (simples)")]
+    public Sprite[] characterPortraits;  // arraste imagens dos personagens
+    public string[] characterNames;      // nomes correspondentes
+    public Sprite[] stageThumbs;         // thumbs de mapas
+    public string[] stageNames;
+
+    [Header("Escolhas atuais")]
+    public int p1CharIndex = 0;
+    public int p2CharIndex = 0; // pode usar como “Bot”
+    public int stageIndex = 0;
+
+    [Header("Opções")]
+    [Range(0f,1f)] public float masterVolume = 1f;
+    public bool fullscreen = true;
+
+    void Awake()
+    {
+        if (I != null && I != this) { Destroy(gameObject); return; }
+        I = this;
+        DontDestroyOnLoad(gameObject);
+        ApplyOptions();
+    }
+
+    public void SetP1(int index) => p1CharIndex = Mathf.Clamp(index, 0, Mathf.Max(0, characterNames.Length-1));
+    public void SetP2(int index) => p2CharIndex = Mathf.Clamp(index, 0, Mathf.Max(0, characterNames.Length-1));
+    public void SetStage(int index) => stageIndex = Mathf.Clamp(index, 0, Mathf.Max(0, stageNames.Length-1));
+
+    public void ApplyOptions()
+    {
+        AudioListener.volume = masterVolume;
+        Screen.fullScreen = fullscreen;
+    }
+
+    // Navegação utilitária
+    public void Go(string sceneName) => SceneManager.LoadScene(sceneName);
+    public void GoMainMenu() => Go(mainMenuScene);
+    public void GoSettings() => Go(settingsScene);
+    public void GoCharSelect() => Go(charSelectScene);
+    public void GoStageSelect() => Go(stageSelectScene);
+    public void GoFight() => Go(fightScene);
+}
