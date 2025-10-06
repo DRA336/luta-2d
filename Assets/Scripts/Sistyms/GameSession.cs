@@ -3,6 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
 {
+    public bool p2IsHuman = false; // false = CPU, true = Player 2
+
+    public void ToggleP2Human() { p2IsHuman = !p2IsHuman; }
+    public void SetP2Human(bool human) { p2IsHuman = human; }
+
     public static GameSession I { get; private set; }
 
     [Header("Cenas")]

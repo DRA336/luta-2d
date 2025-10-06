@@ -476,18 +476,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec3c655bf503b040a97f9cbb5967333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  p2IsHuman: 0
   startScene: StartScreen
   mainMenuScene: MainMenu
   settingsScene: Settings
   charSelectScene: CharacterSelect
   stageSelectScene: StageSelect
   fightScene: Fight
-  characterPortraits: []
-  characterNames: []
+  characterPortraits:
+  - {fileID: -270785710348516584, guid: 7e7a7e1f85e43fd4ebc22ecd56dca912, type: 3}
+  characterNames:
+  - Samurai
   stageThumbs:
   - {fileID: 1999957626797500467, guid: a3df87bc70fdddb4eb97d66040d8db1b, type: 3}
+  - {fileID: -43472127261706492, guid: ce2df18092dd5da4496559db67de018a, type: 3}
   stageNames:
   - Neo Tokio
+  - Metalurgic
   p1CharIndex: 0
   p2CharIndex: 0
   stageIndex: 0

@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class StageSelectUI : MonoBehaviour
 {
     public GameSession session;
     public Image stageImage;
-    public Text stageName;
+    public TMP_Text stageName;
 
     int stageIndex = 0;
 
