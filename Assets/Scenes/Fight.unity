@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1529617963}
-  desiredRange: 0.64
+  desiredRange: 1.56
   approachSpeed: 1
   attackCooldown: 0.8
   defendChance: 0.2
@@ -2017,7 +2017,7 @@ MonoBehaviour:
   ghostDelay: 0.15
   ghostLerp: 6
   hpText: {fileID: 0}
-  enableTester: 0
+  enableTester: 1
   testerDamageKey: 107
   testerDamage: 10
 --- !u!1 &1288536605
@@ -3425,7 +3425,7 @@ MonoBehaviour:
   ghostDelay: 0.15
   ghostLerp: 6
   hpText: {fileID: 0}
-  enableTester: 0
+  enableTester: 1
   testerDamageKey: 101
   testerDamage: 10
 --- !u!1660057539 &9223372036854775807
