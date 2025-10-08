@@ -1361,8 +1361,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 255.07, y: -94.350006}
-  m_SizeDelta: {x: 398.33, y: 17.99}
+  m_AnchoredPosition: {x: 257.76, y: -94.350006}
+  m_SizeDelta: {x: 403.71, y: 17.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &769384982
 MonoBehaviour:
@@ -3442,6 +3442,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1513057123}
+  - component: {fileID: 1513057124}
   m_Layer: 5
   m_Name: Bot/Player2Prortarte
   m_TagString: Untagged
@@ -3476,6 +3477,29 @@ RectTransform:
   m_AnchoredPosition: {x: 301, y: 76}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1513057124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513057122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4ce38a2f3637d94baebea48989a5a3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  session: {fileID: 0}
+  botController: {fileID: 0}
+  player2Controller: {fileID: 0}
+  colorTargets:
+  - {fileID: 640779006}
+  - {fileID: 1418203453}
+  - {fileID: 902198333}
+  - {fileID: 217121953}
+  - {fileID: 769384982}
+  hexP2: '#E53939'
+  hexCPU: '#D1CCCC'
 --- !u!1 &1545138054
 GameObject:
   m_ObjectHideFlags: 0

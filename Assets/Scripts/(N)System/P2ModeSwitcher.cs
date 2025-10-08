@@ -7,7 +7,7 @@ public class P2ModeSwitcher : MonoBehaviour
     public GameSession session;
 
     [Header("Controladores")]
-    public BotController2D botController;          // IA
+    public BotController2D_Pro botController;          // IA
     public Player2Controller2D player2Controller;  // Humano
 
     [Header("Cores da UI (opcional)")]
