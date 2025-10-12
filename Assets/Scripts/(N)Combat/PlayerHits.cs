@@ -17,9 +17,14 @@ public class PlayerHits : MonoBehaviour, IDamageable
     public float CurrentHP { get; private set; }
     public bool IsKO { get; private set; } = false;
 
+    [Header("Ataque")]
+    [Tooltip("Dano base retornado por GetDano() (use isto para balancear chutes/socos simples).")]
+    public float baseAttackDamage = 6f;          // <<< ataque menos forte por padrão
+    public float GetDano() => baseAttackDamage;
+
     public event Action<float, float> OnHealthChanged; // (current, max)
     public event Action<HitData> OnHitReceived;
-    public event Action<PlayerHits> OnKO;              // <- NOVO: dispara quando zera HP
+    public event Action<PlayerHits> OnKO;
 
     [Header("Estados")]
     public bool IsDefending { get; private set; }
@@ -33,11 +38,27 @@ public class PlayerHits : MonoBehaviour, IDamageable
     [Header("DamageHitBoxes – lista de listas")]
     public List<ColliderGroup> damageSets = new();
 
+    [Header("Defesa (balanço)")]
+    [Range(0f, 1f)] public float blockMultiplier = 0.35f;   // toma 35% do dano ao defender
+    [Range(0f, 1f)] public float chipMultiplier  = 0.00f;   // 0 = sem chip
+    public bool useChipOnBlock = false;
+
+    // ---- HURT / STUN ----
+    [Header("Hurt (stun)")]
+    public float hurtStun = 0.25f;
+    public string hurtTrigger = "Hurt";
+
     int currentHurt = -1, currentDefense = -1, currentDamage = -1;
+
+    // refs auxiliares
+    Animator anim;
+    FighterActions actions;
 
     void Awake()
     {
-        ResetForRound();                       // <- garante HP cheio no start
+        anim = GetComponent<Animator>();
+        actions = GetComponent<FighterActions>();
+        ResetForRound();
     }
 
     // ===== API p/ animação/estado =====
@@ -57,26 +78,47 @@ public class PlayerHits : MonoBehaviour, IDamageable
         ActivateOnly(defenseSets, ref currentDefense, -1, false);
     }
 
-    public float GetDano() => 10f;
-
     // ===== Dano recebido =====
     public void ReceiveHit(HitData hit)
     {
         if (IsKO) return;
 
-        float realDamage = Mathf.Max(0f, hit.amount);
-        CurrentHP = Mathf.Max(0f, CurrentHP - realDamage);
+        float incoming = Mathf.Max(0f, hit.amount);
+        float finalDamage = incoming;
 
+        bool blocked = IsDefending;
+
+        if (blocked)
+        {
+            if (useChipOnBlock && chipMultiplier > 0f)
+                finalDamage = incoming * chipMultiplier;     // chip
+            else
+                finalDamage = incoming * blockMultiplier;    // redução
+
+            var shield = GetComponentInChildren<ShieldVisual>();
+            if (shield) shield.Flash();
+        }
+        else
+        {
+            // NÃO defendendo: aplica hurt (trava input) + trigger de animação
+            if (actions) actions.LockInput(hurtStun);
+            if (anim && !string.IsNullOrEmpty(hurtTrigger)) anim.SetTrigger(hurtTrigger);
+        }
+
+        // aplica dano
+        CurrentHP = Mathf.Max(0f, CurrentHP - finalDamage);
+
+        // eventos/UI
         OnHitReceived?.Invoke(hit);
         OnHealthChanged?.Invoke(CurrentHP, MaxHP);
 
+        // KO
         if (CurrentHP <= 0f && !IsKO)
         {
             IsKO = true;
-            // desliga colliders ofensivos/defensivos
-            ActivateOnly(damageSets,  ref currentDamage,  -1, false);
-            ActivateOnly(defenseSets, ref currentDefense, -1, false);
-            OnKO?.Invoke(this);               // <- avisa o MatchController
+            SetDamageSet(-1);
+            SetDefenseSet(-1);
+            OnKO?.Invoke(this);
         }
     }
 
@@ -87,7 +129,7 @@ public class PlayerHits : MonoBehaviour, IDamageable
         CurrentHP = maxHP;
         IsDefending = false;
 
-        SetHurtSet(Mathf.Clamp(currentHurt, 0, hurtSets.Count - 1)); // liga set inicial
+        SetHurtSet(Mathf.Clamp(currentHurt, 0, hurtSets.Count - 1));
         ActivateOnly(defenseSets, ref currentDefense, -1, false);
         ActivateOnly(damageSets,  ref currentDamage,  -1, false);
 

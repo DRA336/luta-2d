@@ -5,6 +5,7 @@ using UnityEngine;
 public class FighterActions : MonoBehaviour
 {
     public PlayerHits hits;
+    public ShieldVisual shieldVisual;    // arraste o do personagem
 
     [Header("Índices dos Sets")]
     public int damageSet_Jab = 0;        // Set de hitbox ativa do jab (configure no PlayerHits)
@@ -22,32 +23,36 @@ public class FighterActions : MonoBehaviour
     bool defending;
     float lastJabTime = -999f;
 
-    void Reset()
-    {
-        hits = GetComponent<PlayerHits>();
-    }
+    // --- NOVO: stun (bloqueia comandos por tempo) ---
+    float lockUntil = 0f;
+    public bool IsLocked => Time.time < lockUntil;
+    public void LockInput(float seconds) { lockUntil = Mathf.Max(lockUntil, Time.time + seconds); }
 
-    public bool CanAct() => !attacking && !hits.IsKO;
+    void Reset() { hits = GetComponent<PlayerHits>(); }
+
+    public bool CanAct() => !attacking && !hits.IsKO && !IsLocked;
 
     // ==== DEFESA ====
     public void StartDefense()
     {
         if (defending || hits.IsKO) return;
         defending = true;
-        hits.StartDefense(defenseSet_High);
+        hits.StartDefense(defenseSet_High);      // PlayerHits liga o collider do set
+        if (shieldVisual) shieldVisual.Show();   // visual
     }
 
     public void StopDefense()
     {
         if (!defending) return;
         defending = false;
-        hits.StopDefense();
+        hits.StopDefense();                      // PlayerHits desliga o collider do set
+        if (shieldVisual) shieldVisual.Hide();   // visual
     }
 
     // ==== ATAQUE (Jab simples) ====
     public void TryJab()
     {
-        if (attacking || hits.IsKO) return;
+        if (attacking || hits.IsKO || IsLocked) return;
         if (Time.time - lastJabTime < jabCooldown) return;
         StartCoroutine(JabRoutine());
     }

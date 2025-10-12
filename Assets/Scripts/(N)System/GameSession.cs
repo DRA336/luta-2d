@@ -43,7 +43,9 @@ public class GameSession : MonoBehaviour
 
     public void SetP1(int index) => p1CharIndex = Mathf.Clamp(index, 0, Mathf.Max(0, characterNames.Length-1));
     public void SetP2(int index) => p2CharIndex = Mathf.Clamp(index, 0, Mathf.Max(0, characterNames.Length-1));
-    public void SetStage(int index) => stageIndex = Mathf.Clamp(index, 0, Mathf.Max(0, stageNames.Length-1));
+    public void SetStage(int index) => stageIndex = Mathf.Clamp(index, 0, Mathf.Max(0, stageNames.Length - 1));
+
+
 
     public void ApplyOptions()
     {

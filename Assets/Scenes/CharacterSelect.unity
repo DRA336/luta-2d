@@ -332,7 +332,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400.5, y: 146.39}
+  m_AnchoredPosition: {x: -399.7, y: 165.2}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &215092225
@@ -1143,6 +1143,7 @@ GameObject:
   - component: {fileID: 637410157}
   - component: {fileID: 637410156}
   - component: {fileID: 637410155}
+  - component: {fileID: 637410158}
   m_Layer: 5
   m_Name: Player2?
   m_TagString: Untagged
@@ -1167,7 +1168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 275.4, y: 154}
+  m_AnchoredPosition: {x: 376.91995, y: 153.99997}
   m_SizeDelta: {x: 114.79, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &637410155
@@ -1213,7 +1214,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 637410156}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 637410158}
+        m_TargetAssemblyTypeName: CharacterSelectP2UI, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &637410156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1252,6 +1265,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637410153}
   m_CullTransparentMesh: 1
+--- !u!114 &637410158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637410153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a81fee9b9c34a749972f3c2747bb889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  session: {fileID: 0}
+  roleLabel: {fileID: 1749629002}
+  colorTargets:
+  - {fileID: 640779006}
+  - {fileID: 1418203453}
+  - {fileID: 902198333}
+  - {fileID: 217121953}
+  - {fileID: 769384982}
+  hexHuman: '#E53939'
+  hexCPU: '#D1CCCC'
+  labelHuman: P2
+  labelCPU: CPU
 --- !u!1 &640779004
 GameObject:
   m_ObjectHideFlags: 0
@@ -3442,7 +3479,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1513057123}
-  - component: {fileID: 1513057124}
   m_Layer: 5
   m_Name: Bot/Player2Prortarte
   m_TagString: Untagged
@@ -3462,6 +3498,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 637410154}
   - {fileID: 1611343641}
   - {fileID: 46951541}
   - {fileID: 464803654}
@@ -3469,7 +3506,6 @@ RectTransform:
   - {fileID: 1305239200}
   - {fileID: 979975417}
   - {fileID: 966040978}
-  - {fileID: 637410154}
   m_Father: {fileID: 67157886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3477,29 +3513,6 @@ RectTransform:
   m_AnchoredPosition: {x: 301, y: 76}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1513057124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1513057122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4ce38a2f3637d94baebea48989a5a3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  session: {fileID: 0}
-  botController: {fileID: 0}
-  player2Controller: {fileID: 0}
-  colorTargets:
-  - {fileID: 640779006}
-  - {fileID: 1418203453}
-  - {fileID: 902198333}
-  - {fileID: 217121953}
-  - {fileID: 769384982}
-  hexP2: '#E53939'
-  hexCPU: '#D1CCCC'
 --- !u!1 &1545138054
 GameObject:
   m_ObjectHideFlags: 0
@@ -3624,7 +3637,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 234.06, y: 143.99998}
+  m_AnchoredPosition: {x: 111.5, y: 164}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749629002

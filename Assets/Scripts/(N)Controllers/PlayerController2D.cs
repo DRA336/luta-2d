@@ -10,6 +10,10 @@ public class PlayerController2D : MonoBehaviour
     public KeyCode defend = KeyCode.S;        // segurar para defender
     public KeyCode jab = KeyCode.J;
 
+    [Header("Bloqueios de controle")]
+    public bool disableMovement = true;       // pedido 1: sem mover
+    public bool disableJump = true;           // pedido 1: sem pular
+
     CharacterMotor2D motor;
     FighterActions actions;
 
@@ -21,21 +25,32 @@ public class PlayerController2D : MonoBehaviour
 
     void Update()
     {
-        // input horizontal
+        // Hurt-stun / KO bloqueia input
+        if (!actions.CanAct())
+        {
+            motor.SetMove(0);
+            actions.StopDefense();
+            return;
+        }
+
+        // Horizontal
         float x = 0f;
-        if (Input.GetKey(left)) x -= 1f;
-        if (Input.GetKey(right)) x += 1f;
+        if (!disableMovement)
+        {
+            if (Input.GetKey(left))  x -= 1f;
+            if (Input.GetKey(right)) x += 1f;
+        }
         motor.SetMove(x);
 
-        // pulo
-        if (Input.GetKeyDown(jump))
+        // Pulo
+        if (!disableJump && Input.GetKeyDown(jump))
             motor.RequestJump();
 
-        // defesa (segurar)
+        // Defesa (segurar)
         if (Input.GetKey(defend)) actions.StartDefense();
         else actions.StopDefense();
 
-        // jab
+        // Ataque (jab)
         if (Input.GetKeyDown(jab) && actions.CanAct())
             actions.TryJab();
     }
