@@ -1,63 +1,68 @@
 using UnityEngine;
 
+/// Bot “Pro” — mantém espaçamento, ataca ao entrar na janela do preferredRange,
+/// recua quando cola demais, e às vezes dá um passo atrás perto do maxRange.
+/// Requer: CharacterMotor2D, FighterActions, Animator.
 [RequireComponent(typeof(CharacterMotor2D))]
 [RequireComponent(typeof(FighterActions))]
 [RequireComponent(typeof(Animator))]
 public class BotController2D_Pro : MonoBehaviour
 {
-    [Header("Alvos")]
-    public Transform target;                       // Player raiz
-    CharacterMotor2D targetMotor;                  // Para saber se o player está no chão
+    [Header("Alvo")]
+    public Transform target;                     // Root do Player
+    public MatchController match;                // opcional: trava fora do round
 
-    [Header("Faixa de distância (m)")]
-    public float minRange = 1.10f;                 // muito perto => recua
-    public float preferredRange = 1.45f;           // “ponto doce” para atacar
-    public float maxRange = 1.85f;                 // muito longe => aproxima
+    [Header("Faixas de distância (m)")]
+    public float minRange = 1.15f;               // < isso => recua
+    public float preferredRange = 1.45f;         // “ponto doce” p/ atacar
+    public float preferredWindow = 0.18f;        // ± janela do preferred
+    public float maxRange = 1.95f;               // > isso => aproxima
 
     [Header("Movimento")]
-    [Range(0f,1f)] public float approachAggression = 0.9f;   // 0..1 (o quanto anda por tick ao aproximar)
-    [Range(0f,1f)] public float retreatFactor = 0.7f;        // velocidade ao recuar
-    public float holdMin = 0.15f;                  // segurar posição por X..Y antes do ataque
-    public float holdMax = 0.35f;
+    [Range(0f,1f)] public float approachAggression = 0.8f; // avança
+    [Range(0f,1f)] public float retreatFactor = 0.6f;      // recua
+
+    [Tooltip("Quando estiver perto de maxRange, chance por segundo de dar um pequeno passo pra trás para re-espacar.")]
+    [Range(0f,1f)] public float tacticalBackstepChance = 0.25f;
+    public float backstepTime = 0.18f;           // duração do recuo tático
+    float backstepUntil = 0f;
 
     [Header("Ataque")]
-    public float attackCooldown = 0.85f;           // tempo mínimo entre ataques
-    public float windupDelay = 0.10f;              // pausa curta antes do kick (telegrapho)
-    [Range(0f,1f)] public float attackVariance = 0.15f; // aleatoriedade no cooldown
+    public float attackCooldown = 0.55f;         // ritmo de ataque
+    [Range(0f,1f)] public float attackVariance = 0.10f; // aleatório no cooldown
+    public float windupDelay = 0.06f;            // telegraph/hold antes do chute
 
-    [Header("Defesa / Anti-air")]
-    [Range(0f,1f)] public float defendChance = 0.25f; // chance por segundo quando perto
-    public float antiAirVyThreshold = 4.0f;           // se player subindo rápido
-    public float antiAirHold = 0.20f;                 // segura posição por este tempo
-    public float microRetreat = 0.35f;                // pequeno recuo quando AA ativa
-
-    [Header("Pulos (evitar pular junto)")]
-    public float jumpCooldown = 1.8f;                 // raramente pula
-    [Range(0f,1f)] public float jumpChanceNear = 0.05f;
-
-    [Header("Match (opcional)")]
-    public MatchController match;
+    [Header("Defesa")]
+    [Tooltip("Chance por segundo de defender quando muito perto (<= minRange).")]
+    [Range(0f,1f)] public float defendChanceNear = 0.30f;
+    public float defendTime = 0.25f;             // quanto tempo segura a defesa
+    float defendUntil = 0f;
 
     // Interno
     CharacterMotor2D motor;
     FighterActions actions;
     Animator anim;
+    Rigidbody2D rbTarget;
 
-    float nextAttackTime = -999f;
-    float holdUntil = 0f;
-    float nextJumpTime = 0f;
+    float nextAttackTime = -999f;                // sentinela: pronto p/ atacar no início
+    float holdUntil = 0f;                        // paciência (para de andar um pouco)
 
     void Awake()
     {
         motor   = GetComponent<CharacterMotor2D>();
         actions = GetComponent<FighterActions>();
         anim    = GetComponent<Animator>();
-        if (target) targetMotor = target.GetComponent<CharacterMotor2D>();
+
+        if (target)
+        {
+            rbTarget = target.GetComponent<Rigidbody2D>();
+            if (!motor.opponent) motor.opponent = target; // garante face ao player
+        }
     }
 
     void Update()
     {
-        // trava o bot fora do combate
+        // fora de combate? travar
         if (match && match.State != MatchState.Fighting)
         {
             motor.SetMove(0);
@@ -74,103 +79,88 @@ public class BotController2D_Pro : MonoBehaviour
             return;
         }
 
-        // Distâncias básicas
-        float dx = target.position.x - transform.position.x;
+        float dx   = target.position.x - transform.position.x;
         float dist = Mathf.Abs(dx);
-        int dir = dx > 0 ? 1 : -1;
+        int   dir  = dx >= 0 ? 1 : -1;
 
-        // ------- ANTI-AIR / NÃO IMITAR PULO -------
-        bool playerAir = (targetMotor ? !targetMotor.IsGrounded : false);
-        float playerVy = 0f;
-        if (targetMotor) playerVy = targetMotor.GetComponent<Rigidbody2D>() ? targetMotor.GetComponent<Rigidbody2D>().linearVelocity.y : 0f;
-
-        bool antiAirWindow = playerAir && playerVy > antiAirVyThreshold; // player subindo rápido
-        if (antiAirWindow)
+        // ===================== DEFESA QUANDO MUITO PERTO =====================
+        if (dist <= minRange + 0.05f)
         {
-            // em vez de pular junto: segurar posição + micro recuo e pode defender
-            motor.SetMove(-dir * retreatFactor);
-            anim.SetBool("Running", Mathf.Abs(retreatFactor) > 0.05f);
-
-            if (Random.value < defendChance * Time.deltaTime * 60f)
-                actions.StartDefense();
-            else
-                actions.StopDefense();
-
-            holdUntil = Time.time + antiAirHold; // segura um pouco antes de qualquer ação
-            return;
-        }
-
-        // solta a defesa se não há pressão
-        actions.StopDefense();
-
-        // ------- CONTROLE DE ESPAÇAMENTO -------
-        float moveX = 0f;
-
-        // Se estiver muito perto, recua
-        if (dist < minRange)
-        {
-            moveX = -dir * retreatFactor;
-            holdUntil = Mathf.Max(holdUntil, Time.time + Random.Range(holdMin * 0.5f, holdMin)); // “reseta” a paciência
-        }
-        // Se perto do ideal, segura (paciência) por um curtinho período
-        else if (dist >= minRange && dist <= maxRange)
-        {
-            // entra em “hold” por um tempo curto (evita andar sem parar)
-            if (holdUntil <= Time.time)
-                holdUntil = Time.time + Random.Range(holdMin, holdMax);
-
-            // enquanto estiver no hold, quase não mexe
-            if (Time.time < holdUntil)
-                moveX = 0f;
-            else
+            // chance por segundo de levantar guarda
+            if (Time.time >= defendUntil && Random.value < defendChanceNear * Time.deltaTime * 60f)
             {
-                // ajusta fino: se está mais longe que o ideal, aproxima um pouco
-                if (dist > preferredRange) moveX = dir * (approachAggression * 0.35f);
-                else if (dist < preferredRange) moveX = -dir * (retreatFactor * 0.35f);
+                actions.StartDefense();
+                defendUntil = Time.time + defendTime;
             }
         }
-        // Longe demais: aproxima
+        // solta defesa quando o tempo acabar
+        if (Time.time >= defendUntil) actions.StopDefense();
+
+        // ===================== RECUO TÁTICO (MAX RANGE) ======================
+        // Se está se “encostando” no maxRange, às vezes dá um passo pra trás p/ re-espacar
+        bool nearMax = dist > (preferredRange + preferredWindow) && dist <= maxRange + 0.1f;
+        if (nearMax && Time.time >= backstepUntil && Random.value < tacticalBackstepChance * Time.deltaTime * 60f)
+        {
+            backstepUntil = Time.time + backstepTime;
+        }
+
+        // ===================== MOVIMENTO/ESPAÇAMENTO =========================
+        float moveX = 0f;
+
+        if (Time.time < backstepUntil)
+        {
+            // recuo tático curto
+            moveX = -dir * retreatFactor;
+        }
+        else if (dist < minRange)
+        {
+            // recua quando cola demais
+            moveX = -dir * retreatFactor;
+            // e “reseta” a paciência para não atacar colado
+            holdUntil = Mathf.Max(holdUntil, Time.time + 0.15f);
+        }
         else if (dist > maxRange)
         {
+            // aproxima quando está longe
             moveX = dir * approachAggression;
+        }
+        else
+        {
+            // dentro da banda [minRange..maxRange]: segurar/ajuste fino
+            // entra em “hold” curto (paciência) para não andar sem parar
+            if (holdUntil <= Time.time) holdUntil = Time.time + Random.Range(0.10f, 0.25f);
+
+            if (Time.time >= holdUntil)
+            {
+                // ajuste fino para tender ao preferred
+                if (dist > preferredRange + 0.05f)      moveX = dir * (approachAggression * 0.35f);
+                else if (dist < preferredRange - 0.05f) moveX = -dir * (retreatFactor * 0.35f);
+                else                                     moveX = 0f;
+            }
+            else
+            {
+                moveX = 0f; // segura posição
+            }
         }
 
         motor.SetMove(moveX);
         anim.SetBool("Running", Mathf.Abs(moveX) > 0.05f);
 
-        // ------- ATAQUE (sem depender do pulo do player) -------
-        // Ataca quando estiver na faixa ideal e não estiver em hold/paciência
-        bool inIdeal = dist >= (preferredRange - 0.08f) && dist <= (preferredRange + 0.10f);
-        bool cooldownReady = Time.time >= nextAttackTime;
-        bool notHolding = Time.time >= holdUntil;
+        // ===================== ATAQUE NA JANELA DO PREFERRED =================
+        bool inPreferredWindow = Mathf.Abs(dist - preferredRange) <= preferredWindow;
+        bool cooldownReady     = Time.time >= nextAttackTime;
+        bool patiencePassed    = Time.time >= holdUntil || dist <= minRange + 0.05f; // se colou, pode atacar mesmo
 
-        if (inIdeal && cooldownReady && notHolding)
+        if (inPreferredWindow && cooldownReady && patiencePassed)
         {
-            // pequeno "telegraph": para um instante antes de chutar
-            StartCoroutine(TelegraphAndKick());
-            // agenda próximo ataque com variação
-            float variance = attackCooldown * Random.Range(1f - attackVariance, 1f + attackVariance);
-            nextAttackTime = Time.time + variance;
-        }
-
-        // ------- DEFESA CASUAL quando colado/pressionado -------
-        if (dist <= minRange + 0.05f && Random.value < defendChance * Time.deltaTime * 60f)
-            actions.StartDefense();
-
-        // ------- PULO (raramente e nunca em sincronia) -------
-        if (Time.time >= nextJumpTime && Random.value < jumpChanceNear * Time.deltaTime * 60f)
-        {
-            // só pula se um pouco longe do ideal, para variar eixo
-            if (dist > preferredRange * 1.1f)
-                motor.RequestJump();
-
-            nextJumpTime = Time.time + jumpCooldown * Random.Range(0.8f, 1.2f);
+            StartCoroutine(TelegraphAndKick()); // seta Trigger "Kick"
+            nextAttackTime = Time.time + attackCooldown * Random.Range(1f - attackVariance, 1f + attackVariance);
         }
     }
 
     System.Collections.IEnumerator TelegraphAndKick()
     {
-        // segura posição por um instante (windup)
+        // telegraph/hold curto antes do chute (parece humano)
         float t = windupDelay;
         while (t > 0f)
         {
@@ -179,19 +169,21 @@ public class BotController2D_Pro : MonoBehaviour
             yield return null;
         }
 
-        // dispara animação de chute
-        var animator = GetComponent<Animator>();
-        animator.SetTrigger("Kick");
+        // animação de chute — ATENÇÃO: seus Animation Events AE_AttackOn/Off ligam a HitBox
+        anim.SetTrigger("Kick");
 
-        // Se você NÃO estiver usando Animation Events, descomente a linha abaixo:
-        // actions.TryJab();
+        // Se ainda estiver ajustando os Animation Events, pode deixar este backup TEMPORÁRIO:
+        // GetComponent<FighterActions>()?.TryJab();
     }
 
-    // Gizmos pra depurar distâncias no editor
+    // Gizmos para depurar as distâncias no editor
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;   Gizmos.DrawLine(transform.position + Vector3.up*1.2f, transform.position + Vector3.right *  minRange *  (transform.localScale.x>=0?1:-1));
-        Gizmos.color = Color.yellow;Gizmos.DrawLine(transform.position + Vector3.up*1.1f, transform.position + Vector3.right *  preferredRange*(transform.localScale.x>=0?1:-1));
-        Gizmos.color = Color.green; Gizmos.DrawLine(transform.position + Vector3.up*1.0f, transform.position + Vector3.right *  maxRange   * (transform.localScale.x>=0?1:-1));
+        Vector3 o = transform.position + Vector3.up * 1.0f;
+        float sgn = (transform.localScale.x >= 0) ? 1f : -1f;
+
+        Gizmos.color = Color.red;     Gizmos.DrawLine(o, o + Vector3.right * minRange * sgn);
+        Gizmos.color = Color.yellow;  Gizmos.DrawLine(o + Vector3.up*0.05f, o + Vector3.right * preferredRange * sgn);
+        Gizmos.color = Color.green;   Gizmos.DrawLine(o + Vector3.up*0.10f, o + Vector3.right * maxRange * sgn);
     }
 }
