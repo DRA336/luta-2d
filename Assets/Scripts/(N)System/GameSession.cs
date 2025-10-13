@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class GameSession : MonoBehaviour
@@ -32,12 +33,17 @@ public class GameSession : MonoBehaviour
     [Header("Opções")]
     [Range(0f,1f)] public float masterVolume = 1f;
     public bool fullscreen = true;
+    public AudioMixer mixer;            // (opcional) arraste aqui
+    public string mixerParam = "MasterVolume"; // nome do parâmetro exposto no Mixer
+
 
     void Awake()
     {
         if (I != null && I != this) { Destroy(gameObject); return; }
         I = this;
         DontDestroyOnLoad(gameObject);
+        masterVolume = PlayerPrefs.GetFloat("SET_VOL", 0.8f);
+        fullscreen   = PlayerPrefs.GetInt("SET_FS", 1) == 1;
         ApplyOptions();
     }
 
@@ -49,9 +55,27 @@ public class GameSession : MonoBehaviour
 
     public void ApplyOptions()
     {
-        AudioListener.volume = masterVolume;
+         // Volume
+    if (mixer) {
+        float dB = (masterVolume > 0.0001f) ? Mathf.Log10(masterVolume) * 20f : -80f;
+        mixer.SetFloat(mixerParam, dB);
+    } else {
+        AudioListener.volume = Mathf.Clamp01(masterVolume);
+    }
+
+    // Tela cheia
+    Screen.fullScreen = fullscreen;
+
+    // Persistência
+    PlayerPrefs.SetFloat("SET_VOL", Mathf.Clamp01(masterVolume));
+    PlayerPrefs.SetInt("SET_FS", fullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+     
+     AudioListener.volume = masterVolume;
         Screen.fullScreen = fullscreen;
     }
+       
+    
 
     // Navegação utilitária
     public void Go(string sceneName) => SceneManager.LoadScene(sceneName);
