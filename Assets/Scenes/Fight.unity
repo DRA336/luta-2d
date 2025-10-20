@@ -2175,7 +2175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28, y: 300}
+  m_AnchoredPosition: {x: -1, y: 349}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &541504211
@@ -2770,7 +2770,7 @@ Transform:
   m_LocalScale: {x: 108, y: 108, z: 108}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1028728494}
+  - {fileID: 1400048527}
   - {fileID: 2087976103}
   m_Father: {fileID: 286388389}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3274,17 +3274,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028728493}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 90.045395}
-  m_LocalScale: {x: 0.009259259, y: 0.0061342595, z: 0.009259259}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1400048527}
-  m_Father: {fileID: 846413273}
+  m_Children: []
+  m_Father: {fileID: 1400048527}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8.358459, y: 7.486084}
-  m_SizeDelta: {x: 453.3, y: 130.3}
+  m_AnchoredPosition: {x: 41.97987, y: -0.91303396}
+  m_SizeDelta: {x: 1061.3514, y: 351.1288}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1028728495
 CanvasRenderer:
@@ -3314,8 +3313,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -534982147197402434, guid: 9b487098c4df4a64fb25d33f7c7db27f, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3342,19 +3341,19 @@ MonoBehaviour:
   frameImage: {fileID: 1028728496}
   colorByPercent:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 0.9811321, g: 0.9636659, b: 0.11569952, a: 1}
-    key2: {r: 0.13261789, g: 0.9339623, b: 0.12775902, a: 0}
-    key3: {r: 0, g: 1, b: 0.9065652, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
+    key0: {r: 0.41902542, g: 0, b: 1, a: 1}
+    key1: {r: 1, g: 0, b: 0, a: 1}
+    key2: {r: 0.9811321, g: 0.9636659, b: 0.11569952, a: 0}
+    key3: {r: 0.13261789, g: 0.9339623, b: 0.12775902, a: 0}
+    key4: {r: 0, g: 1, b: 0.9065652, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 17155
-    ctime2: 43947
-    ctime3: 65535
-    ctime4: 0
+    ctime1: 6361
+    ctime2: 17155
+    ctime3: 43947
+    ctime4: 65535
     ctime5: 0
     ctime6: 0
     ctime7: 0
@@ -3368,7 +3367,7 @@ MonoBehaviour:
     atime7: 0
     m_Mode: 0
     m_ColorSpace: -1
-    m_NumColorKeys: 4
+    m_NumColorKeys: 5
     m_NumAlphaKeys: 2
   lerpSpeed: 12
   ghostDelay: 0.15
@@ -4120,8 +4119,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000062942505, y: -1}
-  m_SizeDelta: {x: 453.3, y: 130.3}
+  m_AnchoredPosition: {x: -79.76, y: -1}
+  m_SizeDelta: {x: 956.45, y: 390.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1366345185
 MonoBehaviour:
@@ -4143,8 +4142,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -534982147197402434, guid: 9b487098c4df4a64fb25d33f7c7db27f, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4188,16 +4187,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400048526}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90.045395}
+  m_LocalScale: {x: 0.009259259, y: 0.0061342595, z: 0.009259259}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1028728494}
+  m_Children:
+  - {fileID: 1028728494}
+  m_Father: {fileID: 846413273}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000045776367, y: 3}
-  m_SizeDelta: {x: 415.2, y: 88.1}
+  m_AnchoredPosition: {x: -8.02, y: 7.4422007}
+  m_SizeDelta: {x: 729.39, y: 100.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1400048528
 MonoBehaviour:
@@ -4283,7 +4283,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 200, y: 426}
+  m_AnchoredPosition: {x: 140, y: 551}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1400308562
@@ -5994,8 +5994,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000045776367, y: 1}
-  m_SizeDelta: {x: 415.2, y: 88.1}
+  m_AnchoredPosition: {x: -109.36, y: 1}
+  m_SizeDelta: {x: 623.88, y: 88.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1931932769
 MonoBehaviour:
@@ -6480,8 +6480,8 @@ RectTransform:
   m_LocalScale: {x: 0.009259259, y: 0.0061342595, z: 0.009259259}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1366345184}
   - {fileID: 1931932768}
+  - {fileID: 1366345184}
   m_Father: {fileID: 846413273}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -6507,19 +6507,19 @@ MonoBehaviour:
   frameImage: {fileID: 1366345185}
   colorByPercent:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 0.9811321, g: 0.9636659, b: 0.11569952, a: 1}
-    key2: {r: 0.13261789, g: 0.9339623, b: 0.12775902, a: 0}
-    key3: {r: 0, g: 1, b: 0.9065652, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
+    key0: {r: 0.41902542, g: 0, b: 1, a: 1}
+    key1: {r: 1, g: 0, b: 0, a: 1}
+    key2: {r: 0.9811321, g: 0.9636659, b: 0.11569952, a: 0}
+    key3: {r: 0.13261789, g: 0.9339623, b: 0.12775902, a: 0}
+    key4: {r: 0, g: 1, b: 0.9065652, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 17155
-    ctime2: 43947
-    ctime3: 65535
-    ctime4: 0
+    ctime1: 6361
+    ctime2: 17155
+    ctime3: 43947
+    ctime4: 65535
     ctime5: 0
     ctime6: 0
     ctime7: 0
@@ -6533,7 +6533,7 @@ MonoBehaviour:
     atime7: 0
     m_Mode: 0
     m_ColorSpace: -1
-    m_NumColorKeys: 4
+    m_NumColorKeys: 5
     m_NumAlphaKeys: 2
   lerpSpeed: 16.6
   ghostDelay: 0.15
