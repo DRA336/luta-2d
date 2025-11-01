@@ -147,4 +147,40 @@ public class PlayerHits : MonoBehaviour, IDamageable
         }
         current = index;
     }
+
+public void OverrideMaxHP(float newMax, bool heal = true)
+{
+    // troca o maxHP interno de forma segura
+    var clamped = Mathf.Max(1f, newMax);
+    // se você usa serialized 'maxHP', ajuste o campo correspondente:
+    // supondo que seu backing field é 'maxHP' (SerializeField):
+    typeof(PlayerHits).GetField("maxHP", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+        ?.SetValue(this, clamped);
+
+    if (heal)
+    {
+        // seta CurrentHP = MaxHP
+        HealFull();
+    }
+    else
+    {
+        // garante limite
+        var current = Mathf.Clamp(CurrentHP, 0f, MaxHP);
+        // se CurrentHP tiver setter privado, use evento para atualizar UI:
+        typeof(PlayerHits).GetProperty("CurrentHP")?
+            .SetValue(this, current, null);
+        OnHealthChanged?.Invoke(current, MaxHP);
+    }
+}
+
+public void HealFull()
+{
+    // se CurrentHP for somente leitura externamente:
+    float full = MaxHP;
+    typeof(PlayerHits).GetProperty("CurrentHP")?
+        .SetValue(this, full, null);
+
+    OnHealthChanged?.Invoke(full, MaxHP);
+}
+
 }

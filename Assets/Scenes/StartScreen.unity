@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -15.940002, y: -268.67}
+  m_AnchoredPosition: {x: -15.940002, y: -268.67004}
   m_SizeDelta: {x: -730.97, y: -725.23}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &216020340
@@ -595,10 +595,10 @@ MonoBehaviour:
   fightScene: Fight
   characterPortraits:
   - {fileID: -270785710348516584, guid: 7e7a7e1f85e43fd4ebc22ecd56dca912, type: 3}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 501b9980d527fef40abac527e5a65486, type: 3}
   characterNames:
   - Samurai
-  - Vazio
+  - Deminou
   stageThumbs:
   - {fileID: 1999957626797500467, guid: a3df87bc70fdddb4eb97d66040d8db1b, type: 3}
   - {fileID: -8377415298526310956, guid: 5c017cd31b627f041b43ec71092bc8d0, type: 3}
@@ -616,6 +616,9 @@ MonoBehaviour:
   fullscreen: 1
   mixer: {fileID: 24100000, guid: 7919566915a9acb4083039ff9efd2ef3, type: 2}
   mixerParam: MasterVolume
+  characterSpecs:
+  - {fileID: 11400000, guid: d783490a3e1845b40b94233ecd26d37d, type: 2}
+  - {fileID: 11400000, guid: c5fa4d08dda6f0143b436fffdc0572a9, type: 2}
 --- !u!4 &734075693
 Transform:
   m_ObjectHideFlags: 0

@@ -36,6 +36,8 @@ public class GameSession : MonoBehaviour
     public AudioMixer mixer;            // (opcional) arraste aqui
     public string mixerParam = "MasterVolume"; // nome do parâmetro exposto no Mixer
 
+    public CharacterSpec[] characterSpecs;
+
 
     void Awake()
     {
@@ -55,25 +57,41 @@ public class GameSession : MonoBehaviour
 
     public void ApplyOptions()
     {
-         // Volume
-    if (mixer) {
-        float dB = (masterVolume > 0.0001f) ? Mathf.Log10(masterVolume) * 20f : -80f;
-        mixer.SetFloat(mixerParam, dB);
-    } else {
-        AudioListener.volume = Mathf.Clamp01(masterVolume);
-    }
+        // Volume
+        if (mixer)
+        {
+            float dB = (masterVolume > 0.0001f) ? Mathf.Log10(masterVolume) * 20f : -80f;
+            mixer.SetFloat(mixerParam, dB);
+        }
+        else
+        {
+            AudioListener.volume = Mathf.Clamp01(masterVolume);
+        }
 
-    // Tela cheia
-    Screen.fullScreen = fullscreen;
+        // Tela cheia
+        Screen.fullScreen = fullscreen;
 
-    // Persistência
-    PlayerPrefs.SetFloat("SET_VOL", Mathf.Clamp01(masterVolume));
-    PlayerPrefs.SetInt("SET_FS", fullscreen ? 1 : 0);
+        // Persistência
+        PlayerPrefs.SetFloat("SET_VOL", Mathf.Clamp01(masterVolume));
+        PlayerPrefs.SetInt("SET_FS", fullscreen ? 1 : 0);
         PlayerPrefs.Save();
-     
-     AudioListener.volume = masterVolume;
+
+        AudioListener.volume = masterVolume;
         Screen.fullScreen = fullscreen;
     }
+    
+    public CharacterSpec GetP1Spec()
+{
+    if (characterSpecs == null || characterSpecs.Length == 0) return null;
+    int i = Mathf.Clamp(p1CharIndex, 0, characterSpecs.Length - 1);
+    return characterSpecs[i];
+}
+public CharacterSpec GetP2Spec()
+{
+    if (characterSpecs == null || characterSpecs.Length == 0) return null;
+    int i = Mathf.Clamp(p2CharIndex, 0, characterSpecs.Length - 1);
+    return characterSpecs[i];
+}
        
     
 
