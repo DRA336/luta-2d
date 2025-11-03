@@ -1,29 +1,77 @@
-// Assets/Scripts/Characters/FightSceneBinder.cs
+// Assets/Scripts/(N)Combat/FightSceneBinder.cs  (pode renomear para FightSceneSpawner.cs)
 using UnityEngine;
 
 public class FightSceneBinder : MonoBehaviour
 {
+    [Header("Sessão + Spawns")]
     public GameSession session;
-    [Header("Appliers em cena")]
-    public CharacterApplier player1;
-    public CharacterApplier player2OrBot;
+    public Transform spawnP1;
+    public Transform spawnP2;
+
+    [Header("UI (opcional)")]
+    public HealthBarUI leftHealthBar;
+    public HealthBarUI rightHealthBar;
+
+    [Header("Match")]
+    public MatchController match;
 
     void Awake()
     {
         if (!session) session = FindAnyObjectByType<GameSession>();
+        if (!match)   match   = FindAnyObjectByType<MatchController>();
     }
 
     void Start()
     {
-        if (!session) return;
+        var specP1 = session ? session.GetP1Spec() : null;
+        var specP2 = session ? session.GetP2Spec() : null;
 
-        var p1 = session.GetP1Spec();
-        var p2 = session.GetP2Spec();
+        if (!specP1 || !specP1.fighterPrefab || !specP2 || !specP2.fighterPrefab)
+        {
+            Debug.LogError("[FightSceneSpawner] CharacterSpec ou fighterPrefab não configurados.");
+            return;
+        }
+        if (!spawnP1 || !spawnP2)
+        {
+            Debug.LogError("[FightSceneSpawner] Defina spawnP1 e spawnP2.");
+            return;
+        }
 
-        if (player1)      player1.Apply(p1);
-        if (player2OrBot) player2OrBot.Apply(p2);
+        // 1) Instanciar
+        var goP1 = Instantiate(specP1.fighterPrefab, spawnP1.position, Quaternion.identity);
+        goP1.name = "Player1";
+        var goP2 = Instantiate(specP2.fighterPrefab, spawnP2.position, Quaternion.identity);
+        goP2.name = session != null && session.p2IsHuman ? "Player2" : "CPU";
 
-        // (opcional) pintar HUDs com a cor do personagem
-        // ex.: se tiver HealthBarCombined com frameImage, aplique spec.uiColor.
+        // 2) Encarar oponente
+        FaceRight(goP1, true);
+        FaceRight(goP2, false);
+
+        // 3) Oponentes nos motores
+        var motorP1 = goP1.GetComponent<CharacterMotor2D>();
+        var motorP2 = goP2.GetComponent<CharacterMotor2D>();
+        if (motorP1 && motorP2) { motorP1.opponent = goP2.transform; motorP2.opponent = goP1.transform; }
+
+        // 4) Barras de vida
+        var hitsP1 = goP1.GetComponent<PlayerHits>();
+        var hitsP2 = goP2.GetComponent<PlayerHits>();
+        if (leftHealthBar)  leftHealthBar.SetTarget(hitsP1);
+        if (rightHealthBar) rightHealthBar.SetTarget(hitsP2);
+
+        // 5) MatchController
+        if (match) { match.player1 = hitsP1; match.player2 = hitsP2; }
+
+        // 6) CPU ↔ P2
+        var switcherP2 = goP2.GetComponent<P2ModeSwitcher>();
+        if (switcherP2) switcherP2.Apply(session != null && session.p2IsHuman);
+        var swP1 = goP1.GetComponent<P2ModeSwitcher>();
+        if (swP1) swP1.enabled = false;
+    }
+
+    void FaceRight(GameObject go, bool right)
+    {
+        var s = go.transform.localScale;
+        s.x = right ? Mathf.Abs(s.x) : -Mathf.Abs(s.x);
+        go.transform.localScale = s;
     }
 }

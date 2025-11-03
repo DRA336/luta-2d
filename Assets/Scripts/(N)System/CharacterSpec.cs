@@ -9,15 +9,12 @@ public class CharacterSpec : ScriptableObject
     public Sprite portrait;                       // para telas de seleção
     public Color uiColor = Color.white;
 
-    [Header("Visual de Jogo")]
-    public Sprite defaultSprite;                  // caso use SpriteRenderer direto
-    public RuntimeAnimatorController animator;    // animator específico
+    [Header("Prefab do lutador")]
+    public GameObject fighterPrefab;   // <<< NEW: prefab do personagem pronto
 
-    [Header("Atributos")]
-    public float maxHP = 100f;
-    public float moveSpeed = 6f;
-    public float jumpForce = 12f;
-    public int   baseDamage = 10;
+    // (Opcional) stats “extras” se você quiser centralizar no Spec:
+    public float overrideMaxHP = -1f;  // -1 = usa do prefab
+    public int   overrideBaseDamage = -1;
 
     [Header("Sons (opcional)")]
     public AudioClip[] voiceClips;
