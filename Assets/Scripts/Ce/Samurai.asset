@@ -15,10 +15,7 @@ MonoBehaviour:
   displayName: Samurai
   portrait: {fileID: 8443794771774750484, guid: 7e7a7e1f85e43fd4ebc22ecd56dca912, type: 3}
   uiColor: {r: 1, g: 1, b: 1, a: 1}
-  defaultSprite: {fileID: -270785710348516584, guid: 7e7a7e1f85e43fd4ebc22ecd56dca912, type: 3}
-  animator: {fileID: 9100000, guid: 964e77b79a2de05419d5c1da6f0a76ac, type: 2}
-  maxHP: 100
-  moveSpeed: 6
-  jumpForce: 12
-  baseDamage: 10
+  fighterPrefab: {fileID: 727492458962164156, guid: 35719fd57f05cd84dbead489b2da6d42, type: 3}
+  overrideMaxHP: -1
+  overrideBaseDamage: -1
   voiceClips: []

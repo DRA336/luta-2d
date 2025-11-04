@@ -15,10 +15,7 @@ MonoBehaviour:
   displayName: Dimonio
   portrait: {fileID: 21300000, guid: 501b9980d527fef40abac527e5a65486, type: 3}
   uiColor: {r: 1, g: 1, b: 1, a: 1}
-  defaultSprite: {fileID: 21300000, guid: f24045e46ed45df45ab61f30d137a379, type: 3}
-  animator: {fileID: 9100000, guid: 8911e854bcb7c6644b8df98ba7cd5bfb, type: 2}
-  maxHP: 100
-  moveSpeed: 6
-  jumpForce: 12
-  baseDamage: 10
+  fighterPrefab: {fileID: 9169713975019008441, guid: 8aeda8215342fb746a398bab35fa3943, type: 3}
+  overrideMaxHP: -1
+  overrideBaseDamage: -1
   voiceClips: []
