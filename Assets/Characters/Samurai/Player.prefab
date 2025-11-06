@@ -19,6 +19,9 @@ GameObject:
   - component: {fileID: 4259455135238491868}
   - component: {fileID: 1548223493655937202}
   - component: {fileID: 6015310765370779032}
+  - component: {fileID: 6276015045987510280}
+  - component: {fileID: 9189497402948378516}
+  - component: {fileID: -6670978855762005451}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -320,6 +323,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hits: {fileID: 9005229076738110649}
   damageSetIndex: 0
+--- !u!114 &6276015045987510280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727492458962164156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c84428d252feb4bad3ddd2ae9b701a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  p1Controller: {fileID: 4259455135238491868}
+  p2Controller: {fileID: -6670978855762005451}
+  botController: {fileID: 9189497402948378516}
+--- !u!114 &9189497402948378516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727492458962164156}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b944fffd9a73e40aee0de07456b09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotController2D_Pro
+  target: {fileID: 0}
+  match: {fileID: 0}
+  minRange: 1.15
+  preferredRange: 1.45
+  preferredWindow: 0.18
+  maxRange: 1.95
+  approachAggression: 0.8
+  retreatFactor: 0.6
+  tacticalBackstepChance: 0.25
+  backstepTime: 0.18
+  attackCooldown: 0.55
+  attackVariance: 0.1
+  windupDelay: 0.06
+  defendChanceNear: 0.3
+  defendTime: 0.25
+--- !u!114 &-6670978855762005451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727492458962164156}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4d0710cd3cfd540ab91a0d02e3daa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player2Controller2D
+  left: 276
+  right: 275
+  jump: 273
+  defend: 274
+  jab: 305
 --- !u!1 &3576030304593873227
 GameObject:
   m_ObjectHideFlags: 0

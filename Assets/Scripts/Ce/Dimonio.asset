@@ -15,7 +15,8 @@ MonoBehaviour:
   displayName: Dimonio
   portrait: {fileID: 21300000, guid: 501b9980d527fef40abac527e5a65486, type: 3}
   uiColor: {r: 1, g: 1, b: 1, a: 1}
-  fighterPrefab: {fileID: 9169713975019008441, guid: 8aeda8215342fb746a398bab35fa3943, type: 3}
+  fighterPrefabP1: {fileID: 9169713975019008441, guid: 8aeda8215342fb746a398bab35fa3943, type: 3}
+  fighterPrefabP2: {fileID: 2915753751637991118, guid: 4c7af8c3482692a49966b0254b625176, type: 3}
   overrideMaxHP: -1
   overrideBaseDamage: -1
   voiceClips: []

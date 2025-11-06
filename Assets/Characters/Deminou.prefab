@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5181391567918971740}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -122,7 +122,7 @@ Transform:
   m_GameObject: {fileID: 8963961841648800341}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.55, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -193,7 +193,9 @@ GameObject:
   - component: {fileID: 2738754669434293970}
   - component: {fileID: 6400993885935199203}
   - component: {fileID: 5386193341886179733}
-  - component: {fileID: 6748660619294932286}
+  - component: {fileID: 5604759833471876408}
+  - component: {fileID: 3490915798930798405}
+  - component: {fileID: 7317869989541901391}
   m_Layer: 0
   m_Name: Deminou
   m_TagString: Player
@@ -495,23 +497,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hits: {fileID: 7421051278974386514}
   damageSetIndex: 0
---- !u!114 &6748660619294932286
+--- !u!114 &5604759833471876408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9169713975019008441}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22004878c85b3934ba54eef3e54f408e, type: 3}
+  m_Script: {fileID: 11500000, guid: 48c84428d252feb4bad3ddd2ae9b701a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterApplier
-  spriteRenderer: {fileID: 2646260219853841969}
-  animator: {fileID: 6074920905049910512}
-  hits: {fileID: 7421051278974386514}
-  motor: {fileID: 2626114817077702862}
-  actions: {fileID: 8366086400742064924}
+  m_EditorClassIdentifier: Assembly-CSharp::ControllerRoles
+  p1Controller: {fileID: 2738754669434293970}
+  p2Controller: {fileID: 3490915798930798405}
+  botController: {fileID: 7317869989541901391}
+--- !u!114 &3490915798930798405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9169713975019008441}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4d0710cd3cfd540ab91a0d02e3daa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player2Controller2D
+  left: 276
+  right: 275
+  jump: 273
+  defend: 274
+  jab: 305
+--- !u!114 &7317869989541901391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9169713975019008441}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b944fffd9a73e40aee0de07456b09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotController2D_Pro
+  target: {fileID: 0}
+  match: {fileID: 0}
+  minRange: 1.15
+  preferredRange: 1.45
+  preferredWindow: 0.18
+  maxRange: 1.95
+  approachAggression: 0.8
+  retreatFactor: 0.6
+  tacticalBackstepChance: 0.25
+  backstepTime: 0.18
+  attackCooldown: 0.55
+  attackVariance: 0.1
+  windupDelay: 0.06
+  defendChanceNear: 0.3
+  defendTime: 0.25
 --- !u!1001 &1185320637496265196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -538,7 +582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3898852378655725159, guid: 4e19dac7464c16a44b5035a1831906cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.03
+      value: -0.52
       objectReference: {fileID: 0}
     - target: {fileID: 3898852378655725159, guid: 4e19dac7464c16a44b5035a1831906cd, type: 3}
       propertyPath: m_LocalPosition.y

@@ -1,4 +1,4 @@
-// Assets/Scripts/(N)Combat/FightSceneBinder.cs  (pode renomear para FightSceneSpawner.cs)
+// Assets/Scripts/(N)Combat/FightSceneBinder.cs
 using UnityEngine;
 
 public class FightSceneBinder : MonoBehaviour
@@ -26,31 +26,36 @@ public class FightSceneBinder : MonoBehaviour
         var specP1 = session ? session.GetP1Spec() : null;
         var specP2 = session ? session.GetP2Spec() : null;
 
-        if (!specP1 || !specP1.fighterPrefab || !specP2 || !specP2.fighterPrefab)
+        if (!specP1 || !specP1.fighterPrefabP1 || !specP2 || !specP2.fighterPrefabP2)
         {
-            Debug.LogError("[FightSceneSpawner] CharacterSpec ou fighterPrefab não configurados.");
+            Debug.LogError("[FightSceneBinder] CharacterSpec sem fighterPrefabP1/P2 configurados.");
             return;
         }
         if (!spawnP1 || !spawnP2)
         {
-            Debug.LogError("[FightSceneSpawner] Defina spawnP1 e spawnP2.");
+            Debug.LogError("[FightSceneBinder] Defina spawnP1 e spawnP2.");
             return;
         }
 
-        // 1) Instanciar
-        var goP1 = Instantiate(specP1.fighterPrefab, spawnP1.position, Quaternion.identity);
+        // 1) Instanciar cada lado
+        var goP1 = Instantiate(specP1.fighterPrefabP1, spawnP1.position, Quaternion.identity);
         goP1.name = "Player1";
-        var goP2 = Instantiate(specP2.fighterPrefab, spawnP2.position, Quaternion.identity);
-        goP2.name = session != null && session.p2IsHuman ? "Player2" : "CPU";
 
-        // 2) Encarar oponente
+        var goP2 = Instantiate(specP2.fighterPrefabP2, spawnP2.position, Quaternion.identity);
+        goP2.name = (session != null && session.p2IsHuman) ? "Player2" : "CPU";
+
+        // 2) Orientação inicial (se encarando)
         FaceRight(goP1, true);
         FaceRight(goP2, false);
 
-        // 3) Oponentes nos motores
+        // 3) Opponents nos motores
         var motorP1 = goP1.GetComponent<CharacterMotor2D>();
         var motorP2 = goP2.GetComponent<CharacterMotor2D>();
-        if (motorP1 && motorP2) { motorP1.opponent = goP2.transform; motorP2.opponent = goP1.transform; }
+        if (motorP1 && motorP2)
+        {
+            motorP1.opponent = goP2.transform;
+            motorP2.opponent = goP1.transform;
+        }
 
         // 4) Barras de vida
         var hitsP1 = goP1.GetComponent<PlayerHits>();
@@ -58,14 +63,12 @@ public class FightSceneBinder : MonoBehaviour
         if (leftHealthBar)  leftHealthBar.SetTarget(hitsP1);
         if (rightHealthBar) rightHealthBar.SetTarget(hitsP2);
 
-        // 5) MatchController
-        if (match) { match.player1 = hitsP1; match.player2 = hitsP2; }
+        // 5) Overrides de stats (opcional)
+        ApplyOverrides(specP1, hitsP1);
+        ApplyOverrides(specP2, hitsP2);
 
-        // 6) CPU ↔ P2
-        var switcherP2 = goP2.GetComponent<P2ModeSwitcher>();
-        if (switcherP2) switcherP2.Apply(session != null && session.p2IsHuman);
-        var swP1 = goP1.GetComponent<P2ModeSwitcher>();
-        if (swP1) swP1.enabled = false;
+        // 6) MatchController
+        if (match) { match.player1 = hitsP1; match.player2 = hitsP2; }
     }
 
     void FaceRight(GameObject go, bool right)
@@ -73,5 +76,20 @@ public class FightSceneBinder : MonoBehaviour
         var s = go.transform.localScale;
         s.x = right ? Mathf.Abs(s.x) : -Mathf.Abs(s.x);
         go.transform.localScale = s;
+    }
+
+    void ApplyOverrides(CharacterSpec spec, PlayerHits hits)
+    {
+        if (!spec || !hits) return;
+
+        if (spec.overrideMaxHP > 0f)
+        {
+            // Se você implementou esse método:
+            // hits.OverrideMaxHP(spec.overrideMaxHP, heal:true);
+        }
+        if (spec.overrideBaseDamage >= 0)
+        {
+            // hits.baseAttackDamage = spec.overrideBaseDamage;
+        }
     }
 }

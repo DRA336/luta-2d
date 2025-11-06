@@ -15,7 +15,8 @@ MonoBehaviour:
   displayName: Samurai
   portrait: {fileID: 8443794771774750484, guid: 7e7a7e1f85e43fd4ebc22ecd56dca912, type: 3}
   uiColor: {r: 1, g: 1, b: 1, a: 1}
-  fighterPrefab: {fileID: 727492458962164156, guid: 35719fd57f05cd84dbead489b2da6d42, type: 3}
+  fighterPrefabP1: {fileID: 727492458962164156, guid: 35719fd57f05cd84dbead489b2da6d42, type: 3}
+  fighterPrefabP2: {fileID: 2915753751637991118, guid: 9aa472bdc6f6ad340b904cf467c123a2, type: 3}
   overrideMaxHP: -1
   overrideBaseDamage: -1
   voiceClips: []

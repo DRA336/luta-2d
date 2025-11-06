@@ -21,9 +21,9 @@ GameObject:
   - component: {fileID: 3179959895273728650}
   - component: {fileID: 6016724917899849865}
   - component: {fileID: 8487783802718330220}
-  - component: {fileID: -4078281647932840546}
+  - component: {fileID: 2532660742914787781}
   m_Layer: 0
-  m_Name: Bot_Player2
+  m_Name: Deminou Bot_Player2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 815424164945274260, guid: 7e7a7e1f85e43fd4ebc22ecd56dca912, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 501b9980d527fef40abac527e5a65486, type: 3}
   m_Color: {r: 0.9811321, g: 0.9811321, b: 0.9811321, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -115,7 +115,7 @@ Animator:
   m_GameObject: {fileID: 2915753751637991118}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 964e77b79a2de05419d5c1da6f0a76ac, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8911e854bcb7c6644b8df98ba7cd5bfb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -359,7 +359,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.6666667, y: 6}
+    oldSize: {x: 7.2, y: 7.2}
     newSize: {x: 16, y: 8.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -367,7 +367,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.6666667, y: 6}
   m_EdgeRadius: 0
---- !u!114 &-4078281647932840546
+--- !u!114 &2532660742914787781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -407,7 +407,7 @@ Transform:
   m_GameObject: {fileID: 6133108442634203824}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 0, z: 0}
+  m_LocalPosition: {x: -0.88, y: 0.48, z: 0}
   m_LocalScale: {x: 1.00001, y: 1.00001, z: 1.00001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -486,7 +486,7 @@ Transform:
   m_GameObject: {fileID: 8926430181409487421}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.02, y: -0.13, z: 0}
+  m_LocalPosition: {x: -0.14, y: 0.53, z: 0}
   m_LocalScale: {x: 1.00001, y: 1.00001, z: 1.00001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -581,7 +581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3898852378655725159, guid: 4e19dac7464c16a44b5035a1831906cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.42
+      value: -0.49
       objectReference: {fileID: 0}
     - target: {fileID: 3898852378655725159, guid: 4e19dac7464c16a44b5035a1831906cd, type: 3}
       propertyPath: m_LocalPosition.y

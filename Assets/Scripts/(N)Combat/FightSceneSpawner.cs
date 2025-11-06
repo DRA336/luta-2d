@@ -2,17 +2,18 @@ using UnityEngine;
 
 public class FightSceneSpawner : MonoBehaviour
 {
-    [Header("Sessão + Spawns")]
-    public GameSession session;     
+    [Header("Sessão + Prefab Base + Spawns")]
+    public GameSession session;
+    public GameObject fighterBasePrefab;         // único prefab base
     public Transform spawnP1;
     public Transform spawnP2;
 
-    [Header("UI (opcional)")]
-    public HealthBarUI leftHealthBar;    
-    public HealthBarUI rightHealthBar;   
+    [Header("UI")]
+    public HealthBarUI leftHealthBar;
+    public HealthBarUI rightHealthBar;
 
     [Header("Match")]
-    public MatchController match;        
+    public MatchController match;
 
     void Awake()
     {
@@ -25,51 +26,46 @@ public class FightSceneSpawner : MonoBehaviour
         var specP1 = session ? session.GetP1Spec() : null;
         var specP2 = session ? session.GetP2Spec() : null;
 
-        if (!specP1 || !specP1.fighterPrefab || !specP2 || !specP2.fighterPrefab)
+        if (!fighterBasePrefab || !spawnP1 || !spawnP2 || !specP1 || !specP2)
         {
-            Debug.LogError("[FightSceneSpawner] CharacterSpec ou fighterPrefab não configurados.");
-            return;
-        }
-        if (!spawnP1 || !spawnP2)
-        {
-            Debug.LogError("[FightSceneSpawner] Defina spawnP1 e spawnP2.");
+            Debug.LogError("[Spawner] Configure fighterBasePrefab, spawns e specs.");
             return;
         }
 
-        // 1) Instanciar prefabs
-        var goP1 = Instantiate(specP1.fighterPrefab, spawnP1.position, Quaternion.identity);
+        var goP1 = Instantiate(fighterBasePrefab, spawnP1.position, Quaternion.identity);
         goP1.name = "Player1";
+        var goP2 = Instantiate(fighterBasePrefab, spawnP2.position, Quaternion.identity);
+        goP2.name = (session != null && session.p2IsHuman) ? "Player2" : "CPU";
 
-        var goP2 = Instantiate(specP2.fighterPrefab, spawnP2.position, Quaternion.identity);
-        goP2.name = session != null && session.p2IsHuman ? "Player2" : "CPU";
-
-        // 2) Encarar
+        // orienta
         FaceRight(goP1, true);
         FaceRight(goP2, false);
 
-        // 3) Opponents nos motores
-        var motorP1 = goP1.GetComponent<CharacterMotor2D>();
-        var motorP2 = goP2.GetComponent<CharacterMotor2D>();
-        if (motorP1 && motorP2) { motorP1.opponent = goP2.transform; motorP2.opponent = goP1.transform; }
+        // instala visuals + stats
+        goP1.GetComponent<VisualInstaller>()?.Install(specP1);
+        goP2.GetComponent<VisualInstaller>()?.Install(specP2);
 
-        // 4) Barras de vida
-        var hitsP1 = goP1.GetComponent<PlayerHits>();
-        var hitsP2 = goP2.GetComponent<PlayerHits>();
-        if (leftHealthBar)  leftHealthBar.SetTarget(hitsP1);
-        if (rightHealthBar) rightHealthBar.SetTarget(hitsP2);
+        // opponents
+        var m1 = goP1.GetComponent<CharacterMotor2D>();
+        var m2 = goP2.GetComponent<CharacterMotor2D>();
+        if (m1 && m2) { m1.opponent = goP2.transform; m2.opponent = goP1.transform; }
 
-        // 5) Overrides (opcional)
-        ApplyOverrides(specP1, hitsP1);
-        ApplyOverrides(specP2, hitsP2);
+        // ligar controladores:
+        // no FighterBase, deixe Player1Controller, Player2Controller e BotController DESLIGADOS por padrão.
+        // aqui você liga o necessário:
+        // P1 -> Player1Controller on
+        // P2 -> Player2Controller on (se session.p2IsHuman) ou Bot on (se não humano)
+        EnableControllers(goP1, p1:true, p2Human:false);
+        EnableControllers(goP2, p1:false, p2Human:(session!=null && session.p2IsHuman));
 
-        // 6) MatchController
-        if (match) { match.player1 = hitsP1; match.player2 = hitsP2; }
+        // barras
+        var h1 = goP1.GetComponent<PlayerHits>();
+        var h2 = goP2.GetComponent<PlayerHits>();
+        if (leftHealthBar)  leftHealthBar.SetTarget(h1);
+        if (rightHealthBar) rightHealthBar.SetTarget(h2);
 
-        // 7) CPU ↔ P2 humano
-        var switcherP2 = goP2.GetComponent<P2ModeSwitcher>();
-        if (switcherP2) switcherP2.Apply(session != null && session.p2IsHuman);
-        var swP1 = goP1.GetComponent<P2ModeSwitcher>();
-        if (swP1) swP1.enabled = false; // garante que P1 não alterna por engano
+        // match
+        if (match) { match.player1 = h1; match.player2 = h2; }
     }
 
     void FaceRight(GameObject go, bool right)
@@ -79,18 +75,24 @@ public class FightSceneSpawner : MonoBehaviour
         go.transform.localScale = s;
     }
 
-    void ApplyOverrides(CharacterSpec spec, PlayerHits hits)
+    void EnableControllers(GameObject go, bool p1, bool p2Human)
     {
-        if (!spec || !hits) return;
+        // troque os tipos abaixo pelos seus nomes reais
+        var p1Ctrl = go.GetComponent<PlayerController2D>();     // seu script de P1
+        var p2Ctrl = go.GetComponent<Player2Controller2D>();    // seu script de P2
+        var bot    = go.GetComponent<BotController2D_Pro>();    // seu script de Bot
 
-        if (spec.overrideMaxHP > 0f)
+        if (p1)
         {
-            // Se você tem um método para alterar MaxHP/curar, chame aqui:
-            // hits.OverrideMaxHP(spec.overrideMaxHP, heal:true);
+            if (p1Ctrl) p1Ctrl.enabled = true;
+            if (p2Ctrl) p2Ctrl.enabled = false;
+            if (bot)    bot.enabled    = false;
         }
-        if (spec.overrideBaseDamage >= 0)
+        else
         {
-            // hits.baseAttackDamage = spec.overrideBaseDamage;
+            if (p1Ctrl) p1Ctrl.enabled = false;
+            if (p2Ctrl) p2Ctrl.enabled = p2Human;
+            if (bot)    bot.enabled    = !p2Human;
         }
     }
 }

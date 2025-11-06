@@ -1,4 +1,3 @@
-// Assets/Scripts/Characters/CharacterSpec.cs
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CharSpec_", menuName = "Game/Character Spec")]
@@ -6,17 +5,14 @@ public class CharacterSpec : ScriptableObject
 {
     [Header("Identidade / UI")]
     public string displayName;
-    public Sprite portrait;                       // para telas de seleção
+    public Sprite portrait;
     public Color uiColor = Color.white;
 
-    [Header("Prefab do lutador")]
-    public GameObject fighterPrefab;   // <<< NEW: prefab do personagem pronto
+    [Header("Prefabs (um para cada lado)")]
+    public GameObject fighterPrefabP1;   // variante já configurada para Player 1
+    public GameObject fighterPrefabP2;   // variante para Player 2 / CPU
 
-    // (Opcional) stats “extras” se você quiser centralizar no Spec:
-    public float overrideMaxHP = -1f;  // -1 = usa do prefab
-    public int   overrideBaseDamage = -1;
-
-    [Header("Sons (opcional)")]
-    public AudioClip[] voiceClips;
+    [Header("Overrides de Atributos (opcional)")]
+    public float overrideMaxHP = -1f;    // -1 = ignora (usa valor do prefab)
+    public int   overrideBaseDamage = -1;// -1 = ignora (usa valor do prefab)
 }
-    
